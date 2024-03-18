@@ -12,7 +12,6 @@ public class ConsultaCep {
 
         URI endereco = URI.create("https://viacep.com.br/ws/" + cep + "/json/");
 
-        HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(endereco)
                 .build();
@@ -23,10 +22,9 @@ public class ConsultaCep {
             response = HttpClient
                     .newHttpClient()
                     .send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (IOException | InterruptedException e) {
+            return new Gson().fromJson(response.body(), Endereco.class);
+        } catch (Exception e) {
             throw new RuntimeException("Nao consegui obter o endereco a partir desse CEP.",e);
         }
-
-        return new Gson().fromJson(response.body(), Endereco.class);
     }
 }
